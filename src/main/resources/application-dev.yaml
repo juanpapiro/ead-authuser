@@ -1,14 +1,12 @@
-#server:
-#  port: 8087
-#  servlet:
-#    context-path: '/ead-authuser/'
-  
-
-#    import: 'configserver:http://localhost:8888'
-
+server:
+  port: 8087
+  servlet:
+    context-path: '/ead-authuser/'
+    
+    
 spring:
   config:
-    import: 'configserver:'
+    import: 'optional:configserver:'
   cloud:
     config:
       discovery:
@@ -16,77 +14,88 @@ spring:
       username: configserver
       password: 'ead123cs'
 
- 
-#  output:
-#    ansi:
-#      enabled: always
-#  datasource:
-#    url: jdbc:postgresql://localhost:5432/ead-authuser-v2
-#    username: postgres
-#    password: root
-#  jpa:
-#    hibernate:
-#      ddl-auto: update
-#      dialect: org.hibernate.dialect.PostgreSQLDialect
-#      jdbc:
-#        lob.non-contextual-creation: true
-#    properties:
-#      hibernate:
-#        show_sql: true
-#  rabbitmq:
-#    addresses: amqps://kzhtwact:GVqFPTKeRiuqeGj3zNAvnJDCUbbj7hYM@jackal.rmq.cloudamqp.com/kzhtwact
-#      
-#logging:
-#  level:
-#    com.ead: trace
-#    root: info
-#    org.springframework.web: debug
-#    org.hibernate: info
-#      
-#      
-#ead:
-#  api:
-#    url:
-#      course: 'http://ead-course-service/ead-course'
-#  broker:
-#    exchange:
-#      userEvent: ead.userevent
-#    
-#resilience4j:
-#  circuitbreaker:
-#    instances:
-#      circuitbreakerInstance:
-#        slidingWindowSize: 30
-#        permittedNumberOfCallsInHalfOpenState: 2
-#        slidingWindowType: TIME_BASED
-#        minimumNumberOfCalls: 2
-#        waitDurationInOpenState: 30s
-#        failureRateThreshold: 80
-#  retry:
-#    instances:
-#      retryInstance:
-#        max-attempts: 3
-#        wait-duration: 5s
-#
-#authuser:
-#  refreshscope: 
-#    name: Juan Paulo
-#
-#management:
-#  endpoints:
-#    web:
-#      exposure:
-#        include:
-#          - refresh
-#          - health
-#          
-#serviceRegistry:
-#  username: serviceregistry
-#  password: 'ead123sr'
-#            
-#eureka:
-#  client:
-#    service-url:
-#      defaultZone: 'http://${serviceRegistry.username}:${serviceRegistry.password}@localhost:8761/eureka'
-#  instance:
-#    hostname: localhost
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ead-authuser-v2
+    username: postgres
+    password: root
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+      jdbc:
+        lob.non-contextual-creation: true
+    properties:
+      hibernate:
+        show_sql: true
+  rabbitmq:
+    addresses: amqps://kzhtwact:GVqFPTKeRiuqeGj3zNAvnJDCUbbj7hYM@jackal.rmq.cloudamqp.com/kzhtwact
+      
+  output:
+    ansi:
+      enabled: always
+
+logging:
+  level:
+    com.ead: info
+    root: info
+    org.springframework.web: info
+    org.hibernate: info
+      
+      
+ead:
+  api:
+    url:
+      course: 'http://ead-course-service/ead-course'
+  broker:
+    exchange:
+      userEvent: ead.userevent
+  serviceRegistry:
+    username: serviceregistry
+    password: 'ead123sr'
+  auth:
+    jwtSecret: ?D(G+KbPeShVmYp3s6v9y$B&E)H@McQfTjWnZr4t7w!z%C*F-JaNdRgUkXp2s5v8
+    jwtExpiration: 14400000
+    
+resilience4j:
+  circuitbreaker:
+    instances:
+      circuitbreakerInstance:
+        slidingWindowSize: 30
+        permittedNumberOfCallsInHalfOpenState: 2
+        slidingWindowType: TIME_BASED
+        minimumNumberOfCalls: 2
+        waitDurationInOpenState: 30s
+        failureRateThreshold: 80
+  retry:
+    instances:
+      retryInstance:
+        max-attempts: 3
+        wait-duration: 60s
+
+authuser:
+  refreshscope: 
+    name: Juan Paulo
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - refresh
+          - health
+          
+     
+eureka:
+  client:
+    service-url:
+      defaultZone: 'http://${ead.serviceRegistry.username}:${ead.serviceRegistry.password}@localhost:8761/eureka'
+  instance:
+    hostname: localhost
+    
+    
+
+    
+            
+
